@@ -1,5 +1,13 @@
 class Game {
-  constructor() {}
+  constructor() {
+
+    this.leaderboard = createElement('h1');
+    this.leader1 = createElement('h2');
+    this.leader2 = createElement('h3');
+
+
+
+  }
 
   getState() {
     var gameStateRef = database.ref("gameState");
@@ -35,6 +43,14 @@ class Game {
     form.hide();
     form.titleImg.position(40, 50);
     form.titleImg.class("gameTitleAfterEffect");
+
+    //position leadeboard
+    this.leaderboard.html("LeaderBoard");
+    this.leaderboard.position(width / 3 - 60, 40);
+
+    this.leader1.position(width / 3 - 50, 80);
+    this.leader2.position(width/3 - 50 , 130);
+
   }
 
   play() {
@@ -44,6 +60,8 @@ class Game {
 
     if (allPlayers !== undefined) {
       image(track, 0, -height * 5, width, height * 6);
+
+      this.showLeaderBoard();
 
       //index of the array
       var index = 0;
@@ -75,11 +93,54 @@ class Game {
     }
   }
 
+
+  showLeaderBoard(){
+    var pos1,pos2;
+
+    var players = Object.values(allPlayers);//[name1, name2]- allplayers array
+
+    //if( both both players are not ranked or player1 is 1st)
+    if((players[0].rank===0 && players[1].rank===0) || players[0].rank===1){
+
+        pos1 = players[0].rank +"   " + players[0].name + "   " + players[0].score;
+
+        pos2 = players[1].rank +"   " + players[1].name + "   " + players[1].score;
+    }
+   
+
+    if(players[1].rank===1){
+      pos1 = players[1].rank +"   " + players[1].name + "   " + players[1].score;
+
+      pos2 = players[0].rank +"   " + players[0].name + "   " + players[0].score;
+    }
+
+    
+
+      this.leader1.html(pos1);
+      this.leader2.html(pos2);
+
+  }
+
+
   handlePlayerControls() {
     // handling keyboard events
     if (keyIsDown(UP_ARROW)) {
       player.positionY += 10;
       player.update();
     }
+
+    if(keyIsDown(RIGHT_ARROW)){
+          player.positionX += 10;
+          player.update();
+    }
+
+    if(keyIsDown(LEFT_ARROW)){
+      player.positionX -= 10;
+      player.update();
+    }
+    
   }
 }
+
+
+//leaderborad
